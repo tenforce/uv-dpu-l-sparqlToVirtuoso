@@ -2,16 +2,7 @@ package eu.unifiedviews.plugins.loader.sparqltovirtuoso;
 
 public class SparqlToVirtuosoConfig {
 
-    private String query = "INSERT {\n" +
-            "  GRAPH <http://graph.com/new> {\n" +
-            "    ?s ?p ?o\n" +
-            "  }\n" +
-            "}\n" +
-            "WHERE {\n" +
-            "  GRAPH <http://graph.com/old> {\n" +
-            "    ?s ?p ?o\n" +
-            "  }\n" +
-            "}";
+    private String query = "DEFINE sql:log-enable 3\nADD <http://localhost:8890/pilot3> TO <http://mu.semte.ch/application>\n";
 
     private String virtuosoUrl = "jdbc:virtuoso://localhost:1111/charset=UTF-8/";
 
