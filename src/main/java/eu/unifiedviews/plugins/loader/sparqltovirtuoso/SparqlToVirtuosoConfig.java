@@ -19,12 +19,6 @@ public class SparqlToVirtuosoConfig {
 
     private String password = "dba";
 
-    private boolean clearDestinationGraph = false;
-
-    private String targetGraphName = "";
-
-    private int commitSize = 100000;
-
     public SparqlToVirtuosoConfig() {
     }
 
@@ -59,21 +53,4 @@ public class SparqlToVirtuosoConfig {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public boolean isClearDestinationGraph() {
-        return clearDestinationGraph;
-    }
-
-    public void setClearDestinationGraph(boolean clearDestinationGraph) {
-        this.clearDestinationGraph = clearDestinationGraph;
-    }
-
-    public String getTargetGraphName() {
-        return targetGraphName;
-    }
-
-    public void setTargetGraphName(String targetGraphName) {
-        this.targetGraphName = targetGraphName;
-    }
-
 }

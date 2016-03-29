@@ -12,7 +12,7 @@
     <artifactId>uv-l-sparqlToVirtuoso</artifactId>
     <name>L-sparqlToVirtuoso</name>
     <description>Loads RDF generated through SPARQL to Virtuoso using VirtuosoRepository.</description>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>bundle</packaging>
 
     <properties>

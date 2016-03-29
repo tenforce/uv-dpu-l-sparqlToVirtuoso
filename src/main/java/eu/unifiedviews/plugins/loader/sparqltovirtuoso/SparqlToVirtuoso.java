@@ -72,9 +72,6 @@ public class SparqlToVirtuoso extends AbstractDpu<SparqlToVirtuosoConfig> {
             throw new DPUException("Error loading driver", ex);
         }
 
-//        if (config.isClearDestinationGraph()) {
-//            executeUpdate(String.format(CLEAR_QUERY, config.getTargetGraphName()));
-//        }
         executeUpdate(config.getQuery());
     }
 

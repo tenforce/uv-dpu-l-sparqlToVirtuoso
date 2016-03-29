@@ -1,15 +1,14 @@
 package eu.unifiedviews.plugins.loader.sparqltovirtuoso;
 
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.ObjectProperty;
-import com.vaadin.ui.*;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.vaadin.dialog.AbstractDialog;
 import eu.unifiedviews.helpers.dpu.vaadin.dialog.UserDialogContext;
-import eu.unifiedviews.helpers.dpu.vaadin.validator.UrlValidator;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * DPU's configuration dialog. User can use this dialog to configure DPU
@@ -26,12 +25,6 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
     private ObjectProperty<String> username = new ObjectProperty<>("");
 
     private ObjectProperty<String> password = new ObjectProperty<>("");
-
-    private ObjectProperty<Boolean> clearDestinationGraph = new ObjectProperty<>(false);
-
-    private ObjectProperty<String> targetGraphName = new ObjectProperty<>("");
-
-    TextField targerGraphNameTextField;
 
     public SparqlToVirtuosoVaadinDialog() {
         super(SparqlToVirtuoso.class);
@@ -57,33 +50,13 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
         mainLayout.addComponent(createTextField(ctx.tr("SparqlToVirtuosoVaadinDialog.virtuosoUrl"), virtuosoUrl));
         mainLayout.addComponent(createTextField(ctx.tr("SparqlToVirtuosoVaadinDialog.username"), username));
         mainLayout.addComponent(passwordField);
-        mainLayout.addComponent(new CheckBox(ctx.tr("SparqlToVirtuosoVaadinDialog.clearDestinationGraph"), clearDestinationGraph));
-        targerGraphNameTextField = createTextField(ctx.tr("SparqlToVirtuosoVaadinDialog.targetGraphName"), targetGraphName);
-
-        targerGraphNameTextField.addValidator(new Validator() {
-
-            @Override
-            public void validate(Object value) throws InvalidValueException {
-                if (value == null || StringUtils.isBlank((String) value)) {
-                    throw new InvalidValueException(ctx.tr(SparqlToVirtuosoVaadinDialog.this.getClass().getSimpleName() + ".exception.target.graph.name.empty"));
-
-                }
-            }
-
-        });
-        targerGraphNameTextField.addValidator(new UrlValidator(true, ctx.getDialogMasterContext().getDialogContext().getLocale()));
-        targerGraphNameTextField.setImmediate(true);
-
-        mainLayout.addComponent(targerGraphNameTextField);
 
         txtQuery = new TextArea(ctx.tr("SparqlConstructVaadinDialog.constructQuery"));
         txtQuery.setSizeFull();
-        txtQuery.setRequired(true);
         txtQuery.addValidator(createSparqlQueryValidator());
         txtQuery.setImmediate(true);
         mainLayout.addComponent(txtQuery);
-        mainLayout.setExpandRatio(txtQuery, 1.0f);
-
+        mainLayout.setExpandRatio(txtQuery, 1);
 
         setCompositionRoot(mainLayout);
     }
@@ -100,8 +73,6 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
         virtuosoUrl.setValue(conf.getVirtuosoUrl());
         username.setValue(conf.getUsername());
         password.setValue(conf.getPassword());
-        clearDestinationGraph.setValue(conf.isClearDestinationGraph());
-        targetGraphName.setValue(conf.getTargetGraphName());
     }
 
     @Override
@@ -119,11 +90,7 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
         conf.setVirtuosoUrl(virtuosoUrl.getValue());
         conf.setUsername(username.getValue());
         conf.setPassword(password.getValue());
-        conf.setClearDestinationGraph(clearDestinationGraph.getValue());
-        if (!targerGraphNameTextField.isValid()) {
-            throw new DPUConfigException(ctx.tr(this.getClass().getSimpleName() + ".validation.exception"));
-        }
-        conf.setTargetGraphName(targetGraphName.getValue());
+
         return conf;
     }
 
