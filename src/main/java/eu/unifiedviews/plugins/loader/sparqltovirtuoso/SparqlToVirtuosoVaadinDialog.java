@@ -174,12 +174,12 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
                 if (value == null || valueStr.isEmpty()) {
                     throw new InvalidValueException(ctx.tr("sparqlvalidator.emptyQuery"));
                 }
-
-                try {
-                    QueryParserUtil.parseQuery(QueryLanguage.SPARQL, valueStr, null);
-                } catch (MalformedQueryException ex) {
-                    throw new InvalidValueException(ctx.tr("sparqlvalidator.invalidQuery") + " " + ex.getMessage());
-                }
+//
+//                try {
+//                    QueryParserUtil.parseQuery(QueryLanguage.SPARQL, valueStr, null);
+//                } catch (MalformedQueryException ex) {
+//                    throw new InvalidValueException(ctx.tr("sparqlvalidator.invalidQuery") + " " + ex.getMessage());
+//                }
             }
         };
         return validator;

@@ -88,10 +88,10 @@ public class SparqlToVirtuoso extends AbstractDpu<SparqlToVirtuosoConfig> {
             virtuosoRepository.initialize();
             repositoryConnection = virtuosoRepository.getConnection();
             if (config.isClearDestinationGraph()) {
-                LOG.info(updateQuery);
+                ContextUtils.sendInfo(ctx, "Update", updateQuery);
                 Update update = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL,updateQuery);
                 update.execute();
-                LOG.info("Finished");
+                ContextUtils.sendInfo(ctx, "Update", "Finished");
             }
         } catch (MalformedQueryException | RepositoryException | UpdateExecutionException ex) {
             throw new DPUException("Error working with Virtuoso using Repository API", ex);
