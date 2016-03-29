@@ -1,20 +1,15 @@
 package eu.unifiedviews.plugins.loader.sparqltovirtuoso;
 
-import com.vaadin.ui.*;
-import org.apache.commons.lang3.StringUtils;
-
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.ObjectProperty;
-
+import com.vaadin.ui.*;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.vaadin.dialog.AbstractDialog;
 import eu.unifiedviews.helpers.dpu.vaadin.dialog.UserDialogContext;
 import eu.unifiedviews.helpers.dpu.vaadin.validator.UrlValidator;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.parser.QueryParserUtil;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * DPU's configuration dialog. User can use this dialog to configure DPU
@@ -35,14 +30,6 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
     private ObjectProperty<Boolean> clearDestinationGraph = new ObjectProperty<>(false);
 
     private ObjectProperty<String> targetGraphName = new ObjectProperty<>("");
-
-    private ObjectProperty<Integer> threadCount = new ObjectProperty<>(1);
-
-    private ObjectProperty<Boolean> perGraph = new ObjectProperty<>(
-            false);
-
-    private ObjectProperty<Boolean> skipOnError = new ObjectProperty<>(
-            false);
 
     TextField targerGraphNameTextField;
 
@@ -72,22 +59,14 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
         mainLayout.addComponent(passwordField);
         mainLayout.addComponent(new CheckBox(ctx.tr("SparqlToVirtuosoVaadinDialog.clearDestinationGraph"), clearDestinationGraph));
         targerGraphNameTextField = createTextField(ctx.tr("SparqlToVirtuosoVaadinDialog.targetGraphName"), targetGraphName);
-        final CheckBox perGraphCheckbox = new CheckBox(ctx.tr("SparqlToVirtuosoVaadinDialog.perGraph"), perGraph);
-        perGraphCheckbox.addValueChangeListener(new ValueChangeListener() {
 
-            @Override
-            public void valueChange(ValueChangeEvent event) {
-                targerGraphNameTextField.setEnabled(!perGraphCheckbox.getValue());
-            }
-        });
         targerGraphNameTextField.addValidator(new Validator() {
 
             @Override
             public void validate(Object value) throws InvalidValueException {
                 if (value == null || StringUtils.isBlank((String) value)) {
-                    if (!perGraphCheckbox.getValue()) {
-                        throw new InvalidValueException(ctx.tr(SparqlToVirtuosoVaadinDialog.this.getClass().getSimpleName() + ".exception.target.graph.name.empty"));
-                    }
+                    throw new InvalidValueException(ctx.tr(SparqlToVirtuosoVaadinDialog.this.getClass().getSimpleName() + ".exception.target.graph.name.empty"));
+
                 }
             }
 
@@ -95,11 +74,7 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
         targerGraphNameTextField.addValidator(new UrlValidator(true, ctx.getDialogMasterContext().getDialogContext().getLocale()));
         targerGraphNameTextField.setImmediate(true);
 
-        mainLayout.addComponent(perGraphCheckbox);
         mainLayout.addComponent(targerGraphNameTextField);
-        mainLayout.addComponent(createTextField(ctx.tr(this.getClass().getSimpleName() + ".threadCount"), threadCount));
-        mainLayout.addComponent(new CheckBox(ctx.tr(this.getClass().getSimpleName() + ".skipOnError"), skipOnError));
-
 
         txtQuery = new TextArea(ctx.tr("SparqlConstructVaadinDialog.constructQuery"));
         txtQuery.setSizeFull();
@@ -122,15 +97,11 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
     @Override
     public void setConfiguration(SparqlToVirtuosoConfig conf) throws DPUConfigException {
         txtQuery.setValue(conf.getQuery());
-
         virtuosoUrl.setValue(conf.getVirtuosoUrl());
         username.setValue(conf.getUsername());
         password.setValue(conf.getPassword());
         clearDestinationGraph.setValue(conf.isClearDestinationGraph());
-        perGraph.setValue(StringUtils.isEmpty(conf.getTargetGraphName()));
         targetGraphName.setValue(conf.getTargetGraphName());
-        threadCount.setValue(conf.getThreadCount());
-        skipOnError.setValue(conf.isSkipOnError());
     }
 
     @Override
@@ -145,22 +116,14 @@ public class SparqlToVirtuosoVaadinDialog extends AbstractDialog<SparqlToVirtuos
             throw new DPUConfigException(ctx.tr("sparqlvalidator.invalidQuery"));
         }
         conf.setQuery(txtQuery.getValue());
-
-
         conf.setVirtuosoUrl(virtuosoUrl.getValue());
         conf.setUsername(username.getValue());
         conf.setPassword(password.getValue());
         conf.setClearDestinationGraph(clearDestinationGraph.getValue());
-        if (perGraph.getValue()) {
-            conf.setTargetGraphName("");
-        } else {
-            if (!targerGraphNameTextField.isValid()) {
-                throw new DPUConfigException(ctx.tr(this.getClass().getSimpleName() + ".validation.exception"));
-            }
-            conf.setTargetGraphName(targetGraphName.getValue());
+        if (!targerGraphNameTextField.isValid()) {
+            throw new DPUConfigException(ctx.tr(this.getClass().getSimpleName() + ".validation.exception"));
         }
-        conf.setThreadCount(threadCount.getValue());
-        conf.setSkipOnError(skipOnError.getValue());
+        conf.setTargetGraphName(targetGraphName.getValue());
         return conf;
     }
 

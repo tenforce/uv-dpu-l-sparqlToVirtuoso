@@ -33,8 +33,6 @@ public class SparqlToVirtuoso extends AbstractDpu<SparqlToVirtuosoConfig> {
     @DataUnit.AsOutput(name = "rdfOutput", optional = true)
     public WritableRDFDataUnit rdfOutput;
 
-    private VirtuosoRepository virtuosoRepository = null;
-
     static final String CLEAR_QUERY = "CLEAR GRAPH <%s>";
 
     public static final String CONFIGURATION_VIRTUOSO_USERNAME = "dpu.l-sparqlToVirtuoso.username";
@@ -64,11 +62,9 @@ public class SparqlToVirtuoso extends AbstractDpu<SparqlToVirtuosoConfig> {
             config.setVirtuosoUrl(virtuosoJdbcUrl);
         }
 
-        final String longMessage = String.format("Configuration: VirtuosoUrl: %s\nusername: %s\nthreadCount: %s\n" +
-                        "targetGraph: %s",
-                config.getVirtuosoUrl(), config.getUsername(),
-                config.getTargetGraphName(),
-                config.getThreadCount());
+        final String longMessage = String.format("Configuration: \nVirtuosoUrl: %s\nusername: %s",
+                config.getVirtuosoUrl(),
+                config.getUsername());
         ContextUtils.sendInfo(ctx, "Configuration", longMessage);
         try {
             Class.forName("virtuoso.jdbc4.Driver");
@@ -76,23 +72,23 @@ public class SparqlToVirtuoso extends AbstractDpu<SparqlToVirtuosoConfig> {
             throw new DPUException("Error loading driver", ex);
         }
 
-        executeUpdate(String.format(CLEAR_QUERY, config.getTargetGraphName()));
+//        if (config.isClearDestinationGraph()) {
+//            executeUpdate(String.format(CLEAR_QUERY, config.getTargetGraphName()));
+//        }
         executeUpdate(config.getQuery());
     }
 
-    private void executeUpdate(String updateQuery) throws DPUException {
+    protected void executeUpdate(String updateQuery) throws DPUException {
         VirtuosoRepository virtuosoRepository = null;
         RepositoryConnection repositoryConnection = null;
         try {
             virtuosoRepository = new VirtuosoRepository(config.getVirtuosoUrl(), config.getUsername(), config.getPassword());
             virtuosoRepository.initialize();
             repositoryConnection = virtuosoRepository.getConnection();
-            if (config.isClearDestinationGraph()) {
-                ContextUtils.sendInfo(ctx, "Update", updateQuery);
-                Update update = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL,updateQuery);
-                update.execute();
-                ContextUtils.sendInfo(ctx, "Update", "Finished");
-            }
+            ContextUtils.sendInfo(ctx, "Update", "Started");
+            Update update = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL,updateQuery);
+            update.execute();
+            ContextUtils.sendInfo(ctx, "Update", "Finished");
         } catch (MalformedQueryException | RepositoryException | UpdateExecutionException ex) {
             throw new DPUException("Error working with Virtuoso using Repository API", ex);
         } finally {

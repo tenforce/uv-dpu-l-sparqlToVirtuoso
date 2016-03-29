@@ -23,10 +23,6 @@ public class SparqlToVirtuosoConfig {
 
     private String targetGraphName = "";
 
-    private int threadCount = 0;
-
-    private boolean skipOnError = false;
-
     private int commitSize = 100000;
 
     public SparqlToVirtuosoConfig() {
@@ -80,27 +76,4 @@ public class SparqlToVirtuosoConfig {
         this.targetGraphName = targetGraphName;
     }
 
-    public int getThreadCount() {
-        return threadCount;
-    }
-
-    public void setThreadCount(int threadCount) {
-        this.threadCount = threadCount;
-    }
-
-    public boolean isSkipOnError() {
-        return skipOnError;
-    }
-
-    public void setSkipOnError(boolean skipOnError) {
-        this.skipOnError = skipOnError;
-    }
-
-    public int getCommitSize() {
-        return commitSize;
-    }
-
-    public void setCommitSize(int commitSize) {
-        this.commitSize = commitSize;
-    }
 }
