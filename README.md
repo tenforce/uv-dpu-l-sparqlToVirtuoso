@@ -7,4 +7,4 @@ L-RdfToVirtuoso
 
 ### Technical notes
 
-* @TODO explain how this works
+* Executes a SPARUL query to a virtuoso instance.
