@@ -2,7 +2,7 @@ package eu.unifiedviews.plugins.loader.sparqltovirtuoso;
 
 public class SparqlToVirtuosoConfig {
 
-    private String query = "DEFINE sql:log-enable 3\nADD <http://localhost:8890/pilot3> TO <http://mu.semte.ch/application>\n";
+    private String query = "DEFINE sql:log-enable 3\nADD <http://localhost:8890/source> TO <http://localhost:8890/target>\n";
 
     private String virtuosoUrl = "jdbc:virtuoso://localhost:1111/charset=UTF-8/";
 

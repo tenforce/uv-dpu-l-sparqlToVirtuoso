@@ -18,11 +18,3 @@ This DPU has no input data unit. The input for this DPU is specified in the conf
 |Name |Type | DataUnit | Description | Mandatory |
 |:--------|:------:|:------:|:-------------|:---------------------:|
 |rdfOutput |o| RDFDataUnit | Metadata about the RDF data loaded to Virtuoso | &nbsp; |
-
-
-### Notes
-
-Use: 
-'''
-DEFINE sql:log-enable 3
-'''

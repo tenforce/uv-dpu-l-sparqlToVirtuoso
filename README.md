@@ -7,4 +7,4 @@ L-RdfToVirtuoso
 
 ### Technical notes
 
-* Executes a SPARUL query to a virtuoso instance.
+* Executes a SPARUL query in a virtuoso instance.

@@ -33,8 +33,6 @@ public class SparqlToVirtuoso extends AbstractDpu<SparqlToVirtuosoConfig> {
     @DataUnit.AsOutput(name = "rdfOutput", optional = true)
     public WritableRDFDataUnit rdfOutput;
 
-    static final String CLEAR_QUERY = "CLEAR GRAPH <%s>";
-
     public static final String CONFIGURATION_VIRTUOSO_USERNAME = "dpu.l-sparqlToVirtuoso.username";
 
     public static final String CONFIGURATION_VIRTUOSO_PASSWORD = "dpu.l-sparqlToVirtuoso.password";
@@ -75,7 +73,7 @@ public class SparqlToVirtuoso extends AbstractDpu<SparqlToVirtuosoConfig> {
         executeUpdate(config.getQuery());
     }
 
-    protected void executeUpdate(String updateQuery) throws DPUException {
+    private void executeUpdate(String updateQuery) throws DPUException {
         VirtuosoRepository virtuosoRepository = null;
         RepositoryConnection repositoryConnection = null;
         try {
